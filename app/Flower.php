@@ -6,14 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Flower extends Model
 {
-    use \Venturecraft\Revisionable\RevisionableTrait;
+    // use \Venturecraft\Revisionable\RevisionableTrait;
 
-    public static function boot()
-    {
-        parent::boot();
-    }
+    // public static function boot()
+    // {
+    //     parent::boot();
+    // }
 
-    protected $revisionCreationsEnabled = true;
+    // protected $revisionCreationsEnabled = true;
+
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'flowers';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'flower_type_id',
+        'variety_color_id'
+    ];
 
     public function getFullNameAttribute()
     {

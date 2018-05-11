@@ -39,7 +39,10 @@ class ProductOrder extends Model
     	'stem_bunch',
     	'unit_price',
     	'upc_no',
-    	'upc_type'
+    	'upc_type',
+        'sku',
+        'skuDesc',
+        'bunchQty'
     ];
 
     /**
