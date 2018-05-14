@@ -71,7 +71,11 @@ class Orden extends Model {
         $query->leftjoin("colors", "colors.code", "=", "cajasFlores.variety_color");
 
         if( isset($params["ordenid"]) && $params["ordenid"] > 0 ) {
-            $query->where("ordenes.id", $params["ordenid"]);
+            $query->whereIn("ordenes.id", $params["ordenid"]);
+        }
+
+        if( isset($params["status"]) ) {
+            $query->where("ordenes.status", $params["status"]);
         }
 
         $query->orderBy("ordenes.id", "ASC");

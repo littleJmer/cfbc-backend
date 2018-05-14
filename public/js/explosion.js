@@ -18,7 +18,8 @@ var Explosion = Explosion ? Explosion : {
 
 		var self = this;
 
-		this.invValid = true;
+		this.invValid 	= true;
+		this.isOpen 	= false;
 
 		this.data = data;
 		this.required = [];
@@ -31,7 +32,7 @@ var Explosion = Explosion ? Explosion : {
 
 		this.master = {
 			fechas: [],
-			inventario: []
+			inventario: [],
 		};
 
 		this.steps = {
@@ -51,6 +52,46 @@ var Explosion = Explosion ? Explosion : {
 		}, 'json');
 
 		// this.render();
+	},
+
+	open: function(id) {
+
+		var self = this;
+
+		this.invValid 	= true;
+		this.isOpen 	= true;
+
+		this.data = [];
+		this.required = [];
+
+		this.inventory = [];
+		this.inventoryGroup = [];
+
+		this.recipesToEdit = [];
+		this.recipeActual = 1;
+
+		this.master = {
+			fechas: [],
+			inventario: [],
+		};
+
+		this.steps = {
+			1: true,
+			2: false,
+			3: false,
+			4: false,
+		};
+
+		// get plan
+		$.get('app/apiv2/planes/'+id, function(response) {
+
+			console.log("Inventory snapshot >>>", JSON.parse(response.inventario));
+			self.inventory = JSON.parse(response.inventario);
+			self.data = response.ordenes;
+			self.render();
+
+		}, 'json');
+
 	},
 
 	reinit: function(cb) {
@@ -426,17 +467,22 @@ var Explosion = Explosion ? Explosion : {
 
 			});
 
-			html+=
-			`
-			<tr>
-				<td>
-					<!-- a href="javascript:void(0);" onclick="Explosion.editRecipesOpen('${inv.flower_type}');" -->
-					<a href="javascript:void(0);" onclick="Explosion.editRecipesOpen('${invIndex}');">
-						<i class="fa fa-edit"></i>&nbsp;Edit
-					</a>
-				</td>
-			</tr>
-			`;
+
+			if(self.isOpen === false) {
+
+				html+=
+				`
+				<tr>
+					<td>
+						<!-- a href="javascript:void(0);" onclick="Explosion.editRecipesOpen('${inv.flower_type}');" -->
+						<a href="javascript:void(0);" onclick="Explosion.editRecipesOpen('${invIndex}');">
+							<i class="fa fa-edit"></i>&nbsp;Edit
+						</a>
+					</td>
+				</tr>
+				`;
+
+			}
 
 			html+= `</tbody></table>`
 
@@ -542,7 +588,7 @@ var Explosion = Explosion ? Explosion : {
 
 			// console.log(orden);
 
-			var readonly 	= "";
+			var readonly = self.isOpen ? "readonly" : "";
 			var master_date = orden.master_date || "";
 
 			// console.log(master_date);
@@ -573,7 +619,7 @@ var Explosion = Explosion ? Explosion : {
 				<td width=20%>${orden.total_stem}</td>
 				<td width=30%>
 					<span class="label label-primary">${orden.load_date}</span>
-					<input type="date" value="${master_date}" onchange="Explosion.setMasterDate(${index}, this.value);" />
+					<input type="date" ${readonly} value="${master_date}" onchange="Explosion.setMasterDate(${index}, this.value);" />
 				</td>
 			</tr>
 			`;
@@ -780,7 +826,7 @@ var Explosion = Explosion ? Explosion : {
         var next, index, inv_final, o;
 
         // var readonly = this.edit? "" : "readonly";
-        var readonly = "";
+        var readonly = this.isOpen ? "readonly" : "";
 
         for(var i in this.master.inventario)
         {
@@ -925,6 +971,52 @@ var Explosion = Explosion ? Explosion : {
         .always(function() {
             loader.hide();
         });
+    },
+
+    save: function() {
+
+    	if(this.isOpen) return false;
+
+    	var self = this;
+    	// var ordenesid = [];
+
+    	console.log("saving.. master");
+
+    	// loop through orders
+    	// for(var i in this.data) {
+    	// 	var o = this.data[i];
+    	// 	ordenesid.push(parseInt(o.ordenid));
+    	// }
+
+    	// adding more params
+    	self.master.name = $("[name='keyname_production']").val();
+    	self.master.num_empleados = $("[name='keynumero_de_empleados']").val();
+    	self.master.horas_empleados = $("[name='keyhoras_de_empleados']").val();
+    	self.master.num_cajas = $("[name='keynumero_de_cajas']").val();
+    	self.master.num_bonches = $("[name='keynumero_de_bonches']").val();
+    	self.master.ordenes = self.data;
+
+    	console.log(self.master);
+
+    	// ready to save -> post
+
+    	loader.mensaje("Guardando Planificación... "+self.master.name);
+        loader.show();
+
+        self.$modal.modal("hide");
+
+        $.post('app/apiv2/master', self.master, function(response) {
+
+        	swal("Plan", "Planificación guardada con éxito.", "success");
+
+        	self.$modal.modal("hide");
+        	$table.DataTable().ajax.reload(null, false);
+
+        }, 'json')
+        .always(function() {
+        	loader.hide();
+        });
+
     },
 
 	insertFlower: function(flower, isOpen) {

@@ -21,7 +21,10 @@
 								<tr>
 									<th>ID</th>
 									<th>Nombre</th>
-									<th>Total de Ordenes</th>
+                                    <th># Bonches</th>
+                                    <th># Cajas</th>
+									<th># de Empleados</th>
+                                    <th>Hora X empleado</th>
 									<th>Estatus</th>
 									<th>Controles</th>
 								</tr>
@@ -38,7 +41,7 @@
 @endsection
 
 @section('modales')
-@include('planner_modal');
+@include('app.ordenes.explosion');
 @endsection
 
 @section('extrajs')
@@ -61,21 +64,24 @@ $(document).ready(function()
         ],
         ajax:
         {
-            url: 'app/api/planes',
-            dataSrc: 'data'
+            url: 'app/apiv2/planes',
+            dataSrc: ''
         },
         aoColumns:
         [
             { mData: 'id' },
             { mData: 'name' },
-            { mData: 'num_orders' },
-            { mData: 'status' },
+            { mData: 'num_bonches' },
+            { mData: 'num_cajas' },
+            { mData: 'num_empleados' },
+            { mData: 'horas_empleados' },
+            { mData: 'statusName' },
             {
                 sClass: 'text-right',
                 mRender: function(d, t, r)
                 {
                     var output=
-                    "<button class='btn btn-sm btn-primary' onclick=\"Planificador.load("+r.id+");\">"+
+                    "<button class='btn btn-sm btn-primary' onclick=\"Explosion.open("+r.id+");\">"+
                         "<i class='fa fa-edit'></i>"+
                     "</button>";
 

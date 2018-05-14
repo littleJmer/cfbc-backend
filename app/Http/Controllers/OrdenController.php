@@ -157,7 +157,7 @@ class OrdenController extends Controller {
 	 */
 	public function imprimir($id) {
 
-		$orden 	= $this->get(["ordenid" => $id], true);
+		$orden 	= $this->get(["ordenid" => [$id]], true);
 		$pdf 	= PDF::loadView('app.ordenes.pdf', ['orden' => $orden[0]]);
 
 		$pdf->setPaper('letter', 'landscape');
@@ -380,6 +380,11 @@ class OrdenController extends Controller {
 	 *
 	 */
 	public function get($params = [], $self = false) {
+
+		if($self === false) {
+			$status = isset($_GET['status']) ? $_GET['status'] : 1;
+			$params["status"] = $status;
+		}
 
 		$result 	= Orden::likeCsv($params)->get();
 		$data 		= [];

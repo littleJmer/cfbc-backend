@@ -9,6 +9,9 @@ use App\Flower;
 use App\ColorCode;
 use App\FlowerType;
 
+use App\Planner;
+use App\Orden;
+
 class InventarioController extends Controller {
 
 	/**
@@ -95,6 +98,52 @@ class InventarioController extends Controller {
 		return response()->json($all->toArray());
 	}
 
+	//
+	public function save_master(Request $req) {
+
+		//
+		$name = $req->input("name");
+		$inventario = $req->input("inventario");
+		$num_bonches = $req->input("num_bonches");
+		$num_cajas = $req->input("num_cajas");
+		$num_empleados = $req->input("num_empleados");
+		$horas_empleados = $req->input("horas_empleados");
+		$ordenes = $req->input("ordenes");
+
+		$existe = Planner::where("name", $name)->get()->count();
+
+		if($existe > 0) {
+			return response()->json("El nombre del Plan ya existe.", 400);
+		}
+
+		//
+		$planner = new Planner;
+
+		$planner->name = $name;
+		$planner->inventario = json_encode($inventario);
+		$planner->num_bonches = $num_bonches;
+		$planner->num_cajas = $num_cajas;
+		$planner->num_empleados = $num_empleados;
+		$planner->horas_empleados = $horas_empleados;
+
+		if( $planner->save() ) {
+
+			foreach ($ordenes as $orden) {
+
+				$o = Orden::find($orden['ordenid']);
+
+				$o->planner_id = $planner->id;
+				$o->planner_date = $orden['master_date'];
+				$o->status = 2;
+				$o->save();
+
+			}
+
+		}
+
+		return response()->json($req);
+
+	}
 
 }
 

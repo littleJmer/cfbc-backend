@@ -20,16 +20,29 @@ class Planner extends Model
      */
     public $timestamps = true;
 
+    public $appends = ['statusName'];
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable=
-    [
+    protected $fillable = [
         'name',
         'inventario'
     ];
+
+    public function getStatusNameAttribute() {
+
+        $output = "En proceso";
+
+        if ($this->status == 2) $output = "Entregado";
+        else if ($this->status == 3) $output = "Cancelado";
+
+
+        return $output;
+
+    }
 
 
     /**

@@ -95,6 +95,13 @@
 														onclick="Explosion.dd();">
 														<i class="fa fa-download"></i>&nbsp;Descargar Master
 													</button>
+													<button 
+														class="btn btn-sm btn-primary" 
+														style="margin: 5px 0;" 
+														type="button" 
+														onclick="Explosion.save();">
+														<i class="fa fa-save"></i>&nbsp;Guardar Master
+													</button>
 												</div>
 											</div>
 
@@ -108,7 +115,7 @@
 											</div>
 
 											<ul class="list-inline pull-right">
-												<li><button type="button" class="btn btn-default" onclick="Explosion.prevBtn(this);">Previous</button></li>
+												<!-- <li><button type="button" class="btn btn-default" onclick="Explosion.prevBtn(this);">Previous</button></li> -->
 												<li><button type="button" class="btn btn-primary btn-info-full" onclick="Explosion.nextBtn(this);">Submit</button></li>
 											</ul>
 										</div>

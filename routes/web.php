@@ -51,7 +51,7 @@ Route::get('/ordenesv2', 'OrdenController@index');
 Route::get('/ordenesv2/imprimir/{id}', 'OrdenController@imprimir');
 Route::post('/ordenesv2/importar', 'OrdenController@importar');
 
-Route::get('inventariov2', 'InventarioController@index');
+Route::get('/inventariov2', 'InventarioController@index');
 
 // Matches The "/app/apiv2" URL
 Route::prefix('app/apiv2')->group(function () {
@@ -61,10 +61,14 @@ Route::prefix('app/apiv2')->group(function () {
     Route::post('ordenes/recetas/toggle', 'OrdenController@recipesOpenOrClose');
     Route::post('ordenes/recetas/swap/{id}', 'OrdenController@recipesSwap');
 
-
     Route::get('inventario', 'InventarioController@get');
     Route::post('inventario', 'InventarioController@store');
     Route::post('inventario/{id}', 'InventarioController@update');
+
+    Route::post('master', 'InventarioController@save_master');
+
+    Route::get('planes', 'PlanController@get');
+    Route::get('planes/{id}', 'PlanController@get_by_id');
 
     Route::get('inventario/flower_types', 'InventarioController@get_flower_types');
     Route::get('inventario/variety_colors', 'InventarioController@get_variety_colors');
