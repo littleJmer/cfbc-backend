@@ -53,6 +53,12 @@ Route::post('/ordenesv2/importar', 'OrdenController@importar');
 
 Route::get('/inventariov2', 'InventarioController@index');
 
+
+Route::get('/plan-de-produccion', 'PlanController@index');
+Route::post('/plan-de-produccion/descarga/csv', 'PlanController@download_csv');
+Route::post('/plan-de-produccion/descarga/plan', 'PlanController@download_plan');
+Route::get('/plan-de-produccion/descarga/plan', 'PlanController@download_plan');
+
 // Matches The "/app/apiv2" URL
 Route::prefix('app/apiv2')->group(function () {
 
@@ -60,6 +66,10 @@ Route::prefix('app/apiv2')->group(function () {
     Route::post('ordenes/explosion', 'OrdenController@makeExcel');
     Route::post('ordenes/recetas/toggle', 'OrdenController@recipesOpenOrClose');
     Route::post('ordenes/recetas/swap/{id}', 'OrdenController@recipesSwap');
+
+
+    Route::post('ordenes/changeColorType', 'OrdenController@changeColorType');
+    
 
     Route::get('inventario', 'InventarioController@get');
     Route::post('inventario', 'InventarioController@store');
@@ -73,6 +83,8 @@ Route::prefix('app/apiv2')->group(function () {
     Route::get('inventario/flower_types', 'InventarioController@get_flower_types');
     Route::get('inventario/variety_colors', 'InventarioController@get_variety_colors');
     Route::get('inventario/para_planificar', 'InventarioController@get_para_planificar');
+
+    Route::get('produccion', 'PlanController@get_produccion');
 
 });
 

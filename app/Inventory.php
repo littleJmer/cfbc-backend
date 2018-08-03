@@ -71,8 +71,8 @@ class Inventory extends Model {
         $select = [
             'inventory.id as inventory_id',
             'inventory.flower_id as flower_id',
-            // 'inventory.quantity as quantity',
-            new Expression("1000 as `quantity`"),
+            'inventory.quantity as quantity',
+            // new Expression("1000 as `quantity`"),
             new Expression("0 as `quantity_locked`"),
             new Expression("0 as `quantity_opened`"),
             new Expression("0 as `quantity_after_locked`"),

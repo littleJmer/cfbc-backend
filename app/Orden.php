@@ -38,6 +38,7 @@ class Orden extends Model {
         'dest_carrier',
         'orig_carrier',
         'order_ship_date',
+        'production_date',
         'load_date',
         'date_code',
         'status',
@@ -76,6 +77,14 @@ class Orden extends Model {
 
         if( isset($params["status"]) ) {
             $query->where("ordenes.status", $params["status"]);
+        }
+
+        if( isset($params["production_date"]) ) {
+            $query->where("ordenes.production_date", $params["production_date"]);
+        }
+
+        if( isset($params["id"]) ) {
+            $query->where("ordenes.id", $params["id"]);
         }
 
         $query->orderBy("ordenes.id", "ASC");

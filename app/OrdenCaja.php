@@ -52,5 +52,4 @@ class OrdenCaja extends Model {
         return $this->hasMany('App\CajaFlor', 'ordencaja_id', 'id');
     }
 }
-?>
 

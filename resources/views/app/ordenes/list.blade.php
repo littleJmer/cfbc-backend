@@ -30,10 +30,10 @@
 								&nbsp;Importar
 							</button>
 
-							<button type="button" class="btn btn-sm btn-primary" id="explosion">
+							<!-- <button type="button" class="btn btn-sm btn-primary" id="explosion">
 								<i class="fa fa-bolt" aria-hidden="true"></i>
 								&nbsp;Explosión
-							</button>
+							</button> -->
 
 							<!-- <button type="button" class="btn btn-sm btn-success" id="empezar">
 								<i class="fa fa-calendar" aria-hidden="true"></i>
@@ -54,8 +54,9 @@
 							<thead>
 								<tr>
 									<th></th>
-									<th><input type="checkbox" name="select_all" value="1" id="select_all" /></th>
+									<!-- <th><input type="checkbox" name="select_all" value="1" id="select_all" /></th> -->
 									<th>Sunvalley Order</th>
+									<th>Production date</th>
 									<th>Ship date</th>
 									<th>Load date</th>
 									<th>Destination via</th>
@@ -162,13 +163,12 @@ var fnFormatProducts = function(table_id, orden_id) {
 				<th>Stems</th>
 				<th>Bunches per Box</th>
 				<th># of Cases</th>
-				<th>
-					<!-- Rounded switch -->
+				<!-- th>
 					<label class="switch">
 					  <input type="checkbox" data-ac-parent="${orden_id}">
 					  <span class="slider round"></span>
 					</label>
-				</th>
+				</th -->
 			</tr>
 		</thead>
 		<tbody></tbody>
@@ -440,18 +440,19 @@ $(document).ready(function() {
 			"width": "5%"
 
 		},
-		{
-			bSortable: false,
-			asSorting: false,
-			className: 'dt-body-center',
-			mRender: function(d, t, r) {
-				if ( r.guess === 1 ) {
-					return "";
-				}
-				return '<input type="checkbox" onclick="checkScore();" name="id[]" value="' + r.ordenid + '">';
-			}
-		},
+		// {
+		// 	bSortable: false,
+		// 	asSorting: false,
+		// 	className: 'dt-body-center',
+		// 	mRender: function(d, t, r) {
+		// 		if ( r.guess === 1 ) {
+		// 			return "";
+		// 		}
+		// 		return '<input type="checkbox" onclick="checkScore();" name="id[]" value="' + r.ordenid + '">';
+		// 	}
+		// },
 		{ mData: 'sun_valley_order' },
+		{ mData: 'production_date' },
 		{ mData: 'ship_date' },
 		{ mData: 'load_date' },
 		{ mData: 'destination_via' },
@@ -484,18 +485,25 @@ $(document).ready(function() {
 		],
 		fnRowCallback: function( nRow, aData, iDisplayIndex ) {
 
-			var color = "";
+			var bgColor = "";
+			var textColor = "";
 
-			if ( aData.guess === 1 ) {
-				color = "#cfd8dc";
+			// nueva | no atendida
+			if ( aData.status == 1 ) {
+				bgColor = "red";
+				textColor = "white";
 			}
 
-			// if ( aData.status == "2" ) {
-			// 	color = "#2196f3";
-			// }
+			if ( aData.guess === 1 ) {
+				bgColor = "#cfd8dc";
+				textColor = "black";
+			}
+
+			console.log(aData.status);
 
 			$(nRow).css({
-				"background": color,
+				"background": bgColor,
+				"color": textColor
 			});
 
 		},
@@ -557,19 +565,19 @@ $(document).ready(function() {
 					{ mData: 'stem_per_bunches'},
 					{ mData: 'bunches_per_box'},
 					{ mData: 'number_of_cases'},
-					{
-						mRender: function(d, o, r) {
-							var checked = r.isOpen == 1 ? "checked" : "";
+					// {
+					// 	mRender: function(d, o, r) {
+					// 		var checked = r.isOpen == 1 ? "checked" : "";
 
-							return `
-							<!-- Rounded switch -->
-							<label class="switch">
-								<input type="checkbox" ${checked} data-ac-child="${ordenid}" data-ac="${r.orderbox_id}">
-								<span class="slider round"></span>
-							</label>
-							`;
-						}
-					},
+					// 		return `
+					// 		<!-- Rounded switch -->
+					// 		<label class="switch">
+					// 			<input type="checkbox" ${checked} data-ac-child="${ordenid}" data-ac="${r.orderbox_id}">
+					// 			<span class="slider round"></span>
+					// 		</label>
+					// 		`;
+					// 	}
+					// },
 					],
 					fnRowCallback: function( nRow, aData, iDisplayIndex )
 					{

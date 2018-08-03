@@ -157,18 +157,41 @@ class OrdenController extends Controller {
 	 */
 	public function imprimir($id) {
 
-		$orden 	= $this->get(["ordenid" => [$id]], true);
-		$pdf 	= PDF::loadView('app.ordenes.pdf', ['orden' => $orden[0]]);
+		if( isset($_GET['date']) && $_GET['date'] != '' ) {
 
-		$pdf->setPaper('letter', 'landscape');
-		$pdf->output();
+			$date = $_GET['date'];
 
-		$dom_pdf    = $pdf->getDomPDF();
-		$canvas     = $dom_pdf ->get_canvas();
+			$ordenes = $this->get(["production_date" => $date], true);
 
-		$canvas->page_text(5, 5, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 10, array(0, 0, 0));
+			$pdf = PDF::loadView('app.ordenes.pdf', ['ordenes' => $ordenes]);
 
-		return $pdf->stream();
+			$pdf->setPaper('letter', 'landscape');
+			$pdf->output();
+
+			$dom_pdf    = $pdf->getDomPDF();
+			$canvas     = $dom_pdf ->get_canvas();
+
+			$canvas->page_text(5, 5, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 10, array(0, 0, 0));
+
+			return $pdf->stream();
+
+		}
+		else {
+
+			$orden 	= $this->get(["ordenid" => [$id]], true);
+			$pdf 	= PDF::loadView('app.ordenes.pdf', ['ordenes' => $orden]);
+
+			$pdf->setPaper('letter', 'landscape');
+			$pdf->output();
+
+			$dom_pdf    = $pdf->getDomPDF();
+			$canvas     = $dom_pdf ->get_canvas();
+
+			$canvas->page_text(5, 5, "Página {PAGE_NUM} de {PAGE_COUNT}", null, 10, array(0, 0, 0));
+
+			return $pdf->stream();
+
+		}
 	}
 
 	/*
@@ -260,6 +283,7 @@ class OrdenController extends Controller {
 					'guess' 				=> $guess === 'GUESS',
 					'orig_carrier' 			=> $row[5],
 					'dest_carrier' 			=> $row[6],
+					'production_date' 		=> date('Y-m-d', strtotime('-3 weekdays', strtotime($row[20]))),
 					'order_ship_date' 		=> date('Y-m-d', strtotime($row[7])),
 					'load_date' 			=> date('Y-m-d', strtotime($row[20])),
 					'date_code' 			=> trim($row[19]),
@@ -386,6 +410,14 @@ class OrdenController extends Controller {
 			$params["status"] = $status;
 		}
 
+		if( isset($_GET["date"]) ) {
+			$params["production_date"] = $_GET["date"];
+		}
+
+		if( isset($_GET["id"]) ) {
+			$params["id"] = $_GET["id"];
+		}
+
 		$result 	= Orden::likeCsv($params)->get();
 		$data 		= [];
 		$ordenes 	= [];
@@ -398,7 +430,7 @@ class OrdenController extends Controller {
 
 			$ordenid = (int)$row["orden_id"];
 
-			$master_date = date('Y-m-d', (strtotime ( '-3 day' , strtotime ( $row["load_date"] ) ) ));
+			// $master_date = date('Y-m-d', (strtotime ( '-3 day' , strtotime ( $row["load_date"] ) ) ));
 
 			if( !isset($data[$ordenid]) ) {
 
@@ -411,9 +443,9 @@ class OrdenController extends Controller {
 					"sales_rep_name" 		=> $row["sales_rep_name"],
 					"orig_carrier" 			=> $row["orig_carrier"],
 					"guess" 				=> $row["guess"],
+					"production_date" 		=> date('Y-m-d', strtotime($row["production_date"])),
 					"ship_date" 			=> date('Y-m-d', strtotime($row["order_ship_date"])),
 					"load_date" 			=> date('Y-m-d', strtotime($row["load_date"])),
-					"master_date" 			=> $master_date,
 					"date_code" 			=> trim($row["date_code"]),
 					"destination_via" 		=> $row["dest_carrier"],
 					"client" 				=> trim($split_client[0]),
@@ -443,7 +475,8 @@ class OrdenController extends Controller {
 			$skunumber 		= $row["skunumber"];
 			$location 		= substr($skunumber, 0, 1);
 			$flower_type 	= substr($skunumber, 1, 3);
-			$variety_color 	= substr($skunumber, 4, 3);
+			// $variety_color 	= substr($skunumber, 4, 3);
+			$variety_color 	= $row['variety_color'];
 			$grade 			= substr($skunumber, 7, 1);
 			$stem_count 	= (int)substr($skunumber, 8, 2);
 			$skudesc 		= $row["skudesc"];
@@ -609,6 +642,27 @@ class OrdenController extends Controller {
 		}
 
 		return response()->json([]);
+
+	}
+
+	public function changeColorType(Request $req) {
+
+		$data = $req->input('data');
+
+		// change colortype
+		foreach ($data as $key => $value) {
+			
+			$CajaFlor = CajaFlor::find($value["id"]);
+
+
+			$CajaFlor->variety_color = $value["value"];
+
+
+			$CajaFlor->save();
+
+		}
+
+		return response()->json($data);
 
 	}
 

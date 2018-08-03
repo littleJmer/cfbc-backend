@@ -27,6 +27,8 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css" rel="stylesheet" />
+    
 
 </head>
 <body>
@@ -111,18 +113,24 @@
                                 <div class="nav-list-title">MENU</div>
                             </li>
                             <li>
+                                <a class="active" aria-current="true" href="/plan-de-produccion">
+                                    <i class="fa fa-pagelines" aria-hidden="true"></i>
+                                    <span class="name">Plan de Prod.</span>
+                                </a>
+                            </li>
+                            <li>
                                 <a class="active" aria-current="true" href="/ordenesv2">
                                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                                     <span class="name">Ordenesv2</span>
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a class="active" aria-current="true" href="/ordenes">
                                     <i class="fa fa-list-ol" aria-hidden="true"></i>
                                     <span class="name">Ordenes</span>
                                 </a>
-                            </li>
-                            <li>
+                            </li> -->
+                            <!-- <li>
                                 <a class="active" aria-current="true" href="/planes">
                                     <i class="fa fa-calendar" aria-hidden="true"></i>
                                     <span class="name">Plan</span>
@@ -134,30 +142,30 @@
                                     <span class="name">Inventario</span>
                                 </a>
                             </li>
-                            <!-- <li>
+                            <li>
                                 <a class="active" aria-current="true" href="/flores">
                                     <i class="fa fa-leaf" aria-hidden="true"></i>
                                     <span class="name">Flores</span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a class="active" aria-current="true" href="/recetas">
                                     <i class="fa fa-book" aria-hidden="true"></i>
                                     <span class="name">Recetas</span>
                                 </a>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <a class="active" aria-current="true" href="/clientes">
                                     <i class="fa fa-briefcase" aria-hidden="true"></i>
                                     <span class="name">Clientes</span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a class="active" aria-current="true" href="/materiales">
                                     <i class="fa fa-wrench" aria-hidden="true"></i>
                                     <span class="name">Materiales</span>
                                 </a>
-                            </li> -->
+                            </li>
                             <li class="submenu">
                                 <a class="active" aria-current="true" href="javascript:void(0);" data-submenu>
                                     <i class="fa fa-cog" aria-hidden="true"></i>
@@ -219,12 +227,14 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>
     <script src="{{ asset('js/planificador.js?_=') }}<?=time()?>"></script>
+    <script src="{{ asset('js/orderTable.js?_=') }}<?=time()?>"></script>
     <script src="{{ asset('js/explosion.js?_=') }}<?=time()?>"></script>
     <script src="https://use.fontawesome.com/e2786d4774.js"></script>
     <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.js"></script>
     <script src="https://momentjs.com/downloads/moment.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
     <script type="text/javascript">
 
         $.ajaxSetup({
